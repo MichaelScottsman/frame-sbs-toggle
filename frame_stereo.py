@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Full/half-SBS controls for the native Steam Frame Gamescope screen."""
+"""Full/half-SBS controls for native and Steam Remote Play screens on Steam Frame."""
 import argparse
 import fcntl
 import json
@@ -24,7 +24,7 @@ def run(args):
 def discover(output):
     entries = []
     for line in output.splitlines():
-        match = re.match(r"^'(valve\.steam\.desktopgame(?:\.[0-9]+)?)' -- ", line)
+        match = re.match(r"^'(valve\.steam\.desktopgame(?:\.[0-9]+)?|steamlink_openvr-overlay)' -- ", line)
         if match:
             entries.append((match[1], ' visible ' in f'{line} '))
     return entries
@@ -33,13 +33,13 @@ def discover(output):
 def choose(entries, explicit=None):
     if explicit:
         if explicit not in [key for key, _ in entries]:
-            raise RuntimeError('Requested overlay is not a Gamescope game screen. Run frame-stereo list.')
+            raise RuntimeError('Requested overlay is not a supported game or Steam streaming screen. Run frame-stereo list.')
         return explicit
     visible = [key for key, active in entries if active]
     if len(visible) == 1:
         return visible[0]
     if not visible:
-        raise RuntimeError('No visible Gamescope game screen. Open the native app in theatre, then retry. Run frame-stereo list to inspect screens.')
+        raise RuntimeError('No visible game or Steam streaming screen. Open the app or stream in theatre, then retry. Run frame-stereo list to inspect screens.')
     raise RuntimeError('Multiple game screens: ' + ', '.join(visible) + '. Choose --overlay KEY.')
 
 
@@ -77,6 +77,8 @@ def visible_layers(key):
 
 
 def flatten(key, path, data, sid):
+    if key == 'steamlink_openvr-overlay':
+        return  # Steam streaming already supplies one image; do not alter Gamescope.
     if not visible_layers(key):
         return
     # Visible subviews establish that forced composition is currently off.
@@ -145,7 +147,7 @@ def operate(command, key, swap, path, sid, sbs_format="half"):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', nargs='?', choices=['toggle', 'on', 'off', 'status', 'list'], default='toggle')
-    parser.add_argument('--overlay', metavar='KEY', help='explicit Gamescope main screen (including a hidden screen)')
+    parser.add_argument('--overlay', metavar='KEY', help='explicit supported main screen (including a hidden screen)')
     parser.add_argument('--swap-eyes', action='store_true', help='right image to left eye when enabling')
     parser.add_argument('--format', choices=['half', 'full'], default='half', help='SBS packing (default: half)')
     parser.add_argument('--menu', action='store_true', help='launcher mode with desktop error notifications')

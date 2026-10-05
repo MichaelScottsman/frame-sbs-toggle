@@ -23,6 +23,22 @@ class Tests(unittest.TestCase):
         ])
         self.assertEqual(fs.discover(listing), [('valve.steam.desktopgame.123', True), ('valve.steam.desktopgame.0', False)])
 
+    def test_stream_detection_excludes_cursor_and_thumbnail(self):
+        listing = "\n".join([
+            "'steamlink_openvr-overlay' -- 'Game [Streaming]', 1920x1080 visible VROverlayType_Dashboard_Main",
+            "'steamlink_openvr-overlay.thumb' -- 'Streaming Client', not_visible VROverlayType_Dashboard_Thumbnail",
+            "'steamlink_openvr-cursor' -- 'Streaming Client', visible VROverlayType_Basic",
+            "'valve.steam.desktopgame.0' -- 'Gamescope', not_visible VROverlayType_Dashboard_Main",
+        ])
+        self.assertEqual(fs.choose(fs.discover(listing)), 'steamlink_openvr-overlay')
+        self.assertEqual(len(fs.discover(listing)), 2)
+
+    def test_stream_does_not_change_gamescope_composition(self):
+        with patch.object(fs, 'visible_layers') as layers, patch.object(fs, 'run') as run:
+            fs.flatten('steamlink_openvr-overlay', None, {}, 'session')
+            layers.assert_not_called()
+            run.assert_not_called()
+
     def test_selection(self):
         with self.assertRaisesRegex(RuntimeError, 'No visible'):
             fs.choose([('a', False)])

@@ -3,7 +3,7 @@
 Choose **Half SBS Toggle** or **Full SBS Toggle** in the Frame's **Launch Program** menu.
 Click once to enable that format and again to restore the original view. Clicking the other
 format switches directly to it. Half SBS stretches compressed eye images horizontally;
-Full SBS keeps their native proportions. No terminal is needed.
+Full SBS keeps their native proportions. Native games and Steam’s built-in Remote Play theatre screens are supported. No terminal is needed.
 If the menu was already open during installation, close and reopen it.
 
 ## Install from the Frame console
@@ -60,11 +60,15 @@ Each eye receives its corresponding half of the source image. Half SBS uses 2× 
 texel aspect; Full SBS uses the original aspect. The default command-line format is half.
 This can be tested with any 2D app, although actual stereoscopic depth requires an SBS source.
 
-Gamescope's separate image layers must be combined before the split. The tool uses
+For native games, Gamescope's separate image layers must be combined before the split. The tool uses
 `gamescopectl composite_force 1` when visible subviews are present, verifies that they disappear,
 and applies the selected stereo aspect. This combination was visually confirmed
 on the user's Frame. Applying stereo to the separate layers caused black gaps; omitting the
 stretch after combining them left the image too narrow.
+
+Steam Remote Play uses its own `steamlink_openvr-overlay` screen. It is detected automatically,
+including when the launcher menu hides it, and does not require changing Gamescope composition.
+PC-rendered VR streams and third-party streaming apps are not automatically targeted.
 
 Forced composition is session-wide and may add GPU work. When this tool enables it, it records
 ownership and disables it after the last saved screen in that SteamVR session is restored.
