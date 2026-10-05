@@ -27,6 +27,21 @@ git -C "$HOME/.local/share/frame-sbs-toggle" pull --ff-only &&
 sh "$HOME/.local/share/frame-sbs-toggle/install-on-frame.sh"
 ```
 
+## Uninstall
+
+Run on the Frame:
+
+```sh
+git -C "$HOME/.local/share/frame-sbs-toggle" pull --ff-only &&
+sh "$HOME/.local/share/frame-sbs-toggle/uninstall-on-frame.sh"
+```
+
+The uninstaller restores saved settings for surviving overlays, releases forced composition
+owned by the tool, and removes the command, helper, menu entries, and saved runtime state.
+If restoring an active screen fails, it stops before removing the tools needed for recovery.
+Reopen Launch Program afterward. It leaves the source checkout and system dependencies in place,
+and it is safe to run again. Reinstall using `install-on-frame.sh` from the retained checkout.
+
 ## Command line
 
 The command remains available:
