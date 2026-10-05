@@ -1,5 +1,7 @@
 # Steam Frame SBS toggles
 
+[Install](#install-from-the-frame-console) · [Uninstall](#uninstall) · [Command line](#command-line)
+
 Choose **Half SBS Toggle** or **Full SBS Toggle** in the Frame's **Launch Program** menu.
 Click once to enable that format and again to restore the original view. Clicking the other
 format switches directly to it. Half SBS stretches compressed eye images horizontally;
@@ -29,12 +31,21 @@ sh "$HOME/.local/share/frame-sbs-toggle/install-on-frame.sh"
 
 ## Uninstall
 
-Run on the Frame:
+Open a terminal on your Steam Frame and run:
 
 ```sh
 git -C "$HOME/.local/share/frame-sbs-toggle" pull --ff-only &&
 sh "$HOME/.local/share/frame-sbs-toggle/uninstall-on-frame.sh"
 ```
+
+If you already have the latest checkout, you can uninstall directly without downloading anything:
+
+```sh
+sh "$HOME/.local/share/frame-sbs-toggle/uninstall-on-frame.sh"
+```
+
+If you cloned into a different folder, use that folder's `uninstall-on-frame.sh` instead.
+No sudo or Steam restart is needed.
 
 The uninstaller restores saved settings for surviving overlays, releases forced composition
 owned by the tool, and removes the command, helper, menu entries, and saved runtime state.
