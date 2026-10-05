@@ -1,0 +1,4 @@
+src/openvr.h
+__pycache__/
+*.pyc
+build/

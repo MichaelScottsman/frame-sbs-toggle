@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Full SBS Toggle
+Comment=Toggle full side-by-side stereo on the current game screen
+Exec=@FRAME_STEREO_EXEC@ --menu --format full
+Icon=video-display
+Terminal=false
+Categories=AudioVideo;
+StartupNotify=false

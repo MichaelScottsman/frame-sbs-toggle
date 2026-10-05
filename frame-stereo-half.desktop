@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Half SBS Toggle
+Comment=Toggle half side-by-side stereo on the current game screen
+Exec=@FRAME_STEREO_EXEC@ --menu --format half
+Icon=video-display
+Terminal=false
+Categories=AudioVideo;
+StartupNotify=false
